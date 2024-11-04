@@ -1,0 +1,95 @@
+.container {
+  padding: 20px;
+  margin: 0 auto;
+  width: 90%;
+  max-width: 1000px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.heading {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #4a4a4a;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.addButton, .darkModeButton {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.addButton {
+  background-color: #007bff;
+  color: white;
+}
+
+.darkModeButton {
+  background-color: #6c757d;
+  color: white;
+}
+
+.tableContainer {
+  margin-top: 20px;
+  background-color: #e9ecef;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.sectionHeading {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #343a40;
+  margin-bottom: 15px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table_header {
+  background-color: #343a40;
+  color: white;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  color: black;
+}
+
+.table th {
+  font-weight: 600;
+  color: white;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.contactID {
+  width: 25%;
+  word-break: break-all;
+}
+
+.table td {
+  font-size: 14px;
+}
+
