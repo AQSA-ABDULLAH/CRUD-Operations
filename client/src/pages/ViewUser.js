@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from "./viewusers.module.css";
+import Modal from '../components/AddUser'; // Import the Modal component
+import AddUser from '../components/AddUser';
 
 export default function ViewUsers() {
   const [contacts, setContacts] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // GET USER DATA
   useEffect(() => {
@@ -17,12 +20,15 @@ export default function ViewUsers() {
       });
   }, []);
 
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1 className={styles.heading}>USER MANAGMENT</h1>
+        <h1 className={styles.heading}>USER MANAGEMENT</h1>
         <div className={styles.buttons}>
-          <button className={styles.addButton}>ADD NEW USER</button>
+          <button className={styles.addButton} onClick={openModal}>ADD NEW USER</button>
         </div>
       </header>
       
@@ -55,6 +61,12 @@ export default function ViewUsers() {
           </tbody>
         </table>
       </div>
+
+      {/* Modal for Adding User */}
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <AddUser />
+      </Modal>
     </div>
   );
 }
+
