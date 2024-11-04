@@ -119,3 +119,9 @@ input:focus {
 .cancelButton:active {
     background-color: #1e7e34;
 }
+
+.error {
+    color: red; /* Red text color for error messages */
+    margin-bottom: 12px;
+    font-size: 14px;
+}

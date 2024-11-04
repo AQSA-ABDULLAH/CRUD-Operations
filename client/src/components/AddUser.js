@@ -6,15 +6,35 @@ const AddUser = ({ onClose }) => {
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [age, setAge] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Clear previous error messages
+        setErrorMessage('');
+
+        // Validate inputs
+        if (!userName || !email || !age) {
+            setErrorMessage('All fields are required.');
+            return;
+        }
+
+        // Validate age
+        const ageNum = parseInt(age, 10);
+        if (isNaN(ageNum) || ageNum <= 0) {
+            setErrorMessage('Age must be a number Or greater than zero.');
+            return;
+        }
+
         // Prepare data to be sent to the API
-        const newUser = { userName, email, age };
+        const newUser = { userName, email, age: ageNum }; // Store age as a number
 
         try {
+            setLoading(true); // Set loading state to true
+
             // Send POST request to the API
             const response = await axios.post("http://localhost:5000/api/user/create-user", newUser);
             console.log("User created successfully: ", response.data);
@@ -25,7 +45,10 @@ const AddUser = ({ onClose }) => {
             setAge('');
             onClose(); // Close the modal after submission
         } catch (error) {
+            setErrorMessage('Failed to create user. Please try again later.'); // Set error message
             console.error("Error creating user: ", error);
+        } finally {
+            setLoading(false); // Reset loading state
         }
     };
 
@@ -43,6 +66,7 @@ const AddUser = ({ onClose }) => {
                 </button>
                 <h2>Add New User</h2>
             </div>
+
             <form onSubmit={handleSubmit}>
                 <div className={styles.formGroup}>
                     <label htmlFor="userName">Name:</label>
@@ -51,7 +75,6 @@ const AddUser = ({ onClose }) => {
                         id="userName"
                         value={userName}
                         onChange={(e) => setUserName(e.target.value)}
-                        required
                     />
                 </div>
                 <div className={styles.formGroup}>
@@ -61,20 +84,23 @@ const AddUser = ({ onClose }) => {
                         id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        required
                     />
                 </div>
                 <div className={styles.formGroup}>
                     <label htmlFor="age">Age:</label>
                     <input
-                        type="number"
+                        type="text"
                         id="age"
                         value={age}
                         onChange={(e) => setAge(e.target.value)}
-                        required
                     />
                 </div>
-                <button type="submit" className={styles.submitButton}>Submit</button>
+
+                {errorMessage && <div className={styles.error}>{errorMessage}</div>} {/* Display error message */}
+
+                <button type="submit" className={styles.submitButton} disabled={loading}>
+                    {loading ? 'Submitting...' : 'Submit'} {/* Show loading state */}
+                </button>
             </form>
         </div>
     );
