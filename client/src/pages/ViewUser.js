@@ -8,16 +8,20 @@ export default function ViewUsers() {
     const [contacts, setContacts] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // GET USER DATA
+    // Function to fetch user data
+    const fetchUsers = async () => {
+        try {
+            const res = await axios.get("http://localhost:5000/api/user/get-users");
+            const contactUsData = res.data.data || [];
+            setContacts(contactUsData);
+        } catch (err) {
+            console.error("Error fetching contact data: ", err);
+        }
+    };
+
+    // Fetch users on component mount
     useEffect(() => {
-        axios.get("http://localhost:5000/api/user/get-users")
-            .then(res => {
-                const contactUsData = res.data.data || [];
-                setContacts(contactUsData);
-            })
-            .catch(err => {
-                console.error("Error fetching contact data: ", err);
-            });
+        fetchUsers();
     }, []);
 
     const openModal = () => setIsModalOpen(true);
@@ -63,8 +67,9 @@ export default function ViewUsers() {
 
             {/* Modal for Adding User */}
             <Modal isOpen={isModalOpen} onClose={closeModal}>
-                <AddUser onClose={closeModal} /> {/* Pass onClose to AddUser */}
+                <AddUser onClose={() => { closeModal(); fetchUsers(); }} /> {/* Refresh data on close */}
             </Modal>
         </div>
     );
 }
+
