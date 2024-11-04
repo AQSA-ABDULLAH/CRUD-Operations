@@ -5,17 +5,20 @@ require("dotenv").config();
 const port = process.env.PORT;
 const app = express();
 
+// Enable CORS for all routes and origins
+app.use(cors());
+
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+// Connection to MongoDB
+require('./db/connection.js');
 
 // Routes
 const userRoutes = require('./routes/users.js');
 
 // Load Routes
 app.use('/api/user', userRoutes);
-
-// Cors
-app.use(cors());
 
 // Connection to MongoDB
 require('./db/connection.js');
