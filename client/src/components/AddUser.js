@@ -8,6 +8,7 @@ const AddUser = ({ onClose }) => {
     const [age, setAge] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false); // New loading state for submission
 
     // Handle form submission
     const handleSubmit = async (e) => {
@@ -25,7 +26,7 @@ const AddUser = ({ onClose }) => {
         // Validate age
         const ageNum = parseInt(age, 10);
         if (isNaN(ageNum) || ageNum <= 0) {
-            setErrorMessage('Age must be a number Or greater than zero.');
+            setErrorMessage('Age must be a number greater than zero.');
             return;
         }
 
@@ -33,6 +34,7 @@ const AddUser = ({ onClose }) => {
         const newUser = { userName, email, age: ageNum }; // Store age as a number
 
         try {
+            setIsSubmitting(true); // Set submitting state to true
             setLoading(true); // Set loading state to true
 
             // Send POST request to the API
@@ -49,6 +51,7 @@ const AddUser = ({ onClose }) => {
             console.error("Error creating user: ", error);
         } finally {
             setLoading(false); // Reset loading state
+            setIsSubmitting(false); // Reset submitting state
         }
     };
 
@@ -57,10 +60,7 @@ const AddUser = ({ onClose }) => {
             <div className={styles.form_header}>
                 <button
                     className={styles.closeButton}
-                    onClick={() => {
-                        console.log('Close button clicked'); // Debugging log
-                        onClose(); // Call onClose
-                    }}
+                    onClick={onClose}
                 >
                     X
                 </button>
@@ -98,12 +98,15 @@ const AddUser = ({ onClose }) => {
 
                 {errorMessage && <div className={styles.error}>{errorMessage}</div>} {/* Display error message */}
 
-                <button type="submit" className={styles.submitButton} disabled={loading}>
-                    {loading ? 'Submitting...' : 'Submit'} {/* Show loading state */}
+                <button type="submit" className={styles.submitButton} disabled={loading || isSubmitting}>
+                    {isSubmitting ? 'Submitting...' : 'Submit'} {/* Show loading state */}
                 </button>
+
+                {isSubmitting && <div className={styles.loadingIndicator}>Loading...</div>} {/* Loading indicator after submission */}
             </form>
         </div>
     );
 };
 
 export default AddUser;
+
